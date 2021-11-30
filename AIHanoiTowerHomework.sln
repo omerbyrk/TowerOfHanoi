@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31912.275
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TowerOfHanoi", "TowerOfHanoi\TowerOfHanoi.csproj", "{1EC31A02-5C59-49C1-A4AB-C0D015968375}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AIHanoiTowerHomework", "TowerOfHanoi\AIHanoiTowerHomework.csproj", "{1EC31A02-5C59-49C1-A4AB-C0D015968375}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -18,5 +18,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D84C7FAB-030C-4E63-8009-1A13B9CBAD04}
 	EndGlobalSection
 EndGlobal

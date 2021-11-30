@@ -3,111 +3,63 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.Threading;
 
-namespace TowerOfHanoi
+namespace AIHanoiTowerHomework
 {
 
-	public partial class TowerOfHanoi : Form
+	public partial class AIHanoiTowerHomework : Form
 	{
 
 		#region fields and properties
-		private Pile pile1, pile2, pile3;
-		private Int32 nRings = 6;
+		private Stick stick1, stick2, stick3;
+		private int nRings = 3;
 		private Color[] colors = { 
-			Color.Red, 
-			Color.Yellow, 
-			Color.Black, 
-			Color.Blue, 
-			Color.Green, 
-			Color.Purple,
 			Color.Lime,
 			Color.Navy,
 			Color.Orange
 		};
-		private Color pileColor = Color.Gray;
-		private Int32 pileWidth = 200;
-		private Int32 pileHeight;
+		private Color stiackColor = Color.Gray;
+		private int stickWidth = 200;
+		private int stickHeight;
 		private Thread thread = null;
 		private DateTime timer;
 		#endregion fields and properties
 
-		public TowerOfHanoi()
+		public AIHanoiTowerHomework()
 		{
 			InitializeComponent();
 			Control.CheckForIllegalCrossThreadCalls = false;
-			hideDebugger();  // debugger code;
 
-			pileHeight = pnl_hanoi.Height - 20;
-			pileWidth = pnl_hanoi.Width / 3;
-			nRings = (Int32)nud_n_discs.Value;
+			stickHeight = pnl_hanoi.Height - 20;
+			stickWidth = pnl_hanoi.Width / 3;
 
-			draw();
+			prepareScreen();
 		}
 
-		private void draw()
+
+		private void makeMovement(Stick from, Stick to, Stick temp, int n)
 		{
-			pile1 = new Pile(pnl_hanoi, pileColor, 20 + 0, pileHeight, pileWidth - 40, pileHeight);
-			pile2 = new Pile(pnl_hanoi, pileColor, 20 + pileWidth, pileHeight, pileWidth - 40, pileHeight);
-			pile3 = new Pile(pnl_hanoi, pileColor, 20 + pileWidth * 2, pileHeight, pileWidth - 40, pileHeight);
-
-			pile1.RemoveRings();
-			pile2.RemoveRings();
-			pile3.RemoveRings();
-
-			for (Int32 r = 0; r < nRings; r++)
-			{
-				pile1.AddRing(
-					new Ring(
-						pnl_hanoi,
-						colors[r],
-						(nRings - r) * (pileWidth - 40) / (2 * nRings),
-						pileHeight / nRings
-					)
-				);
-			}
-			this.Refresh();
-		}
-
-		private void doMoves(Pile from, Pile to, Pile temp, Int32 n)
-		{
-			Thread.Sleep(trb_speed.Value * trb_speed.Value * 2);
-
-			textBox1.Text += String.Format("n:{0} ", n);
-			textBox1.SelectionStart = textBox1.Text.Length;
-			textBox1.ScrollToCaret();
+			Thread.Sleep(250);
 
 			if (n == 1)
 			{
-				to.AddRing(from.RemoveRing());
+				to.AddTile(from.RemoveRing());
 				this.Refresh();
 
 				if (from.isEmpty() && temp.isEmpty())
 				{
-					textBox1.Text += "DONE";
-					textBox1.SelectionStart = textBox1.Text.Length;
-					textBox1.ScrollToCaret();
-
-					tssl_timer.Text = String.Format("~{0}ms", Math.Round((DateTime.Now - timer).TotalMilliseconds).ToString());
 					return;
 				}
 			}
 			else
 			{
-				doMoves(from, temp, to, n - 1);
-				doMoves(from, to, temp, 1);
-				doMoves(temp, to, from, n - 1);
+				makeMovement(from, temp, to, n - 1);
+				makeMovement(from, to, temp, 1);
+				makeMovement(temp, to, from, n - 1);
 			}
 		}
 
-		private void solveMiddle()
-		{
-			doMoves(pile1, pile2, pile3, nRings);
-		}
-		private void solveRight()
-		{
-			doMoves(pile1, pile3, pile2, nRings);
-		}
 
-		private void btn_solve_Click(object sender, System.EventArgs e)
+		private void btnSolveClick(object sender, System.EventArgs e)
 		{
 			timer = DateTime.Now;
 
@@ -116,14 +68,9 @@ namespace TowerOfHanoi
 				thread.Abort();
 			}
 
-			if (rdb_solve_middle.Checked)
-			{
-				thread = new Thread(new System.Threading.ThreadStart(solveMiddle));
-			}
-			else if (rdb_solve_right.Checked)
-			{
-				thread = new Thread(new System.Threading.ThreadStart(solveRight));
-			}
+
+		    thread = new Thread(new System.Threading.ThreadStart(() => makeMovement(stick1, stick2, stick3, nRings)));
+
 
 			thread.Start();
 
@@ -131,69 +78,44 @@ namespace TowerOfHanoi
 			btn_reset.Enabled = true;
 		}
 
-		private void btn_reset_Click(object sender, System.EventArgs e)
+		private void btnResetClick(object sender, System.EventArgs e)
 		{
-			tssl_timer.Text = String.Empty;
 
-			draw();
+			prepareScreen();
 
 			btn_solve.Enabled = true;
 			btn_reset.Enabled = false;
 		}
 
-		private void pnl_hanoi_Paint(object sender, PaintEventArgs e)
+		private void panelPaint(object sender, PaintEventArgs e)
 		{
-			pile1.Draw();
-			pile2.Draw();
-			pile3.Draw();
+			stick1.Draw();
+			stick2.Draw();
+			stick3.Draw();
 		}
 
-		private void nud_n_discs_ValueChanged(object sender, EventArgs e)
+		private void prepareScreen()
 		{
-			nRings = (Int32)nud_n_discs.Value;
+			stick1 = new Stick(pnl_hanoi, stiackColor, 20 + 0, stickHeight, stickWidth - 60, stickHeight - 60);
+			stick2 = new Stick(pnl_hanoi, stiackColor, 20 + stickWidth, stickHeight, stickWidth - 60, stickHeight - 60);
+			stick3 = new Stick(pnl_hanoi, stiackColor, 20 + stickWidth * 2, stickHeight, stickWidth - 60, stickHeight - 60);
 
-			this.btn_reset_Click(sender, e);
-		}
+			stick1.RemoveRings();
+			stick2.RemoveRings();
+			stick3.RemoveRings();
 
-		private void lbl_n_discs_Click(object sender, EventArgs e)
-		{
-			nud_n_discs.Focus();
-		}
-
-		private void lbl_speed_Click(object sender, EventArgs e)
-		{
-			trb_speed.Focus();
-		}
-
-		private void TowerOfHanoi_Shown(object sender, EventArgs e)
-		{
-			if (Program.isDebug)
+			for (int r = 0; r < nRings; r++)
 			{
-				openDebugger();
+				stick1.AddTile(
+					new Tile(
+						pnl_hanoi,
+						colors[r],
+						(nRings - r) * (stickWidth - 60) / (2 * nRings),
+						(stickHeight / nRings - 60)
+					)
+				);
 			}
+			this.Refresh();
 		}
-
-
-		#region Debugger;
-		private Int32 debuggerSize = 200;
-		private void hideDebugger()
-		{
-			debuggerSize = this.pnl_debug.Width;
-			this.Width -= debuggerSize;
-			pnl_debug.Hide();
-		}
-		private void openDebugger()
-		{
-			Int32 endSize = this.Width + debuggerSize;
-			Double steps = debuggerSize / 30;
-			while (this.Width <= endSize)
-			{
-				this.Width += (Int32)steps;
-				this.Left -= (Int32)(steps / 2);
-				Application.DoEvents();  // needed to not stall the program;
-			}
-			pnl_debug.Show();
-		}
-		#endregion Debugger;
 	}
 }

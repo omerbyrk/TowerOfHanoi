@@ -2,10 +2,10 @@
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace TowerOfHanoi
+namespace AIHanoiTowerHomework
 {
 
-	public class Ring
+	public class Tile
 	{
 
 		#region fields and properties
@@ -53,7 +53,7 @@ namespace TowerOfHanoi
 		}
 		#endregion fields and properties
 
-		public Ring(Panel _panel, Color _color, Int32 _width, Int32 _height)
+		public Tile(Panel _panel, Color _color, Int32 _width, Int32 _height)
 		{
 			panel = _panel;
 			color = _color;

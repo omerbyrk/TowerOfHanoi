@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace TowerOfHanoi
+namespace AIHanoiTowerHomework
 {
 	static class Program
 	{
@@ -33,7 +33,7 @@ namespace TowerOfHanoi
 
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
-			Application.Run(new TowerOfHanoi());
+			Application.Run(new AIHanoiTowerHomework());
 		}
 	}
 }

@@ -3,10 +3,10 @@ using System.Collections;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace TowerOfHanoi
+namespace AIHanoiTowerHomework
 {
 
-	public class Pile
+	public class Stick
 	{
 
 		#region fields and properties
@@ -19,7 +19,7 @@ namespace TowerOfHanoi
 		private Int32 pileHeight = 20;
 		#endregion fields and properties
 
-		public Pile(Panel _panel, Color _color, Int32 _x, Int32 _y, Int32 _width, Int32 _height)
+		public Stick(Panel _panel, Color _color, Int32 _x, Int32 _y, Int32 _width, Int32 _height)
 		{
 			rings = new Stack();
 			panel = _panel;
@@ -30,16 +30,16 @@ namespace TowerOfHanoi
 			height = _height;
 		}
 
-		public void AddRing(Ring r)
+		public void AddTile(Tile r)
 		{
 			r.X = x + (width / 2);
 			r.Y = y - (rings.Count * r.Height);
 			rings.Push(r);
 		}
 
-		public Ring RemoveRing()
+		public Tile RemoveRing()
 		{
-			return (Ring)rings.Pop();
+			return (Tile)rings.Pop();
 		}
 
 		public void RemoveRings()
@@ -56,7 +56,7 @@ namespace TowerOfHanoi
 
 			try  // error: "Collection was modified; enumeration operation may not execute."
 			{
-				foreach (Ring r in rings)
+				foreach (Tile r in rings)
 				{
 					r.Draw();
 				}
